@@ -35,9 +35,9 @@ Here's a walkthrough of implemented user stories:
 
 
 <img src='https://cloud.githubusercontent.com/assets/20750697/24596682/a1d5b172-17f5-11e7-8560-adea31b2352f.jpeg' />
-<img src='https://www.dropbox.com/s/qqkrfjtjfp7jf6w/Flicks-features.gif?dl=0' />
-<img src='https://www.dropbox.com/s/xgzq0pfzukxwh7k/Flicks-networkerror2.gif?dl=0' />
-<img src='https://www.dropbox.com/s/0wzs52scml04a5o/Flicks-networkerrorAlert.gif?dl=0' />
+<img src='hhttps://drive.google.com/file/d/0B2lv-HKZRsR7RlJQMzQyc1VTLWc/view?usp=sharing' />
+<img src='https://drive.google.com/file/d/0B2lv-HKZRsR7Yi1nRXBWNjg4ajQ/view?usp=sharing' />
+<img src='https://drive.google.com/file/d/0B2lv-HKZRsR7akZYTGlpb3lzVjA/view?usp=sharing' />
 
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
