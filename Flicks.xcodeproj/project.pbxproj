@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		4C03E1531E8F858D00C8B4D8 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C03E1521E8F858D00C8B4D8 /* DetailViewController.swift */; };
 		4C87511E1E91C16900547700 /* samplebg.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4C87511D1E91C16900547700 /* samplebg.jpg */; };
+		4C8751201E91E1EB00547700 /* MoviesCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C87511F1E91E1EB00547700 /* MoviesCollectionViewCell.swift */; };
 		4CB6D37E1E8E44B9005B1C36 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CB6D37D1E8E44B9005B1C36 /* AppDelegate.swift */; };
 		4CB6D3831E8E44B9005B1C36 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4CB6D3811E8E44B9005B1C36 /* Main.storyboard */; };
 		4CB6D3851E8E44B9005B1C36 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4CB6D3841E8E44B9005B1C36 /* Assets.xcassets */; };
@@ -27,6 +28,7 @@
 /* Begin PBXFileReference section */
 		4C03E1521E8F858D00C8B4D8 /* DetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		4C87511D1E91C16900547700 /* samplebg.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = samplebg.jpg; sourceTree = "<group>"; };
+		4C87511F1E91E1EB00547700 /* MoviesCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoviesCollectionViewCell.swift; sourceTree = "<group>"; };
 		4CB6D37A1E8E44B9005B1C36 /* Flicks.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Flicks.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CB6D37D1E8E44B9005B1C36 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4CB6D3821E8E44B9005B1C36 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -104,6 +106,7 @@
 			isa = PBXGroup;
 			children = (
 				4CB6D3921E8E55C5005B1C36 /* MoviesCell.swift */,
+				4C87511F1E91E1EB00547700 /* MoviesCollectionViewCell.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -282,6 +285,7 @@
 				4CE23A871E910774004FC943 /* CAGradientLayer-templates.swift in Sources */,
 				4CE23A851E90FCCA004FC943 /* navViewController.swift in Sources */,
 				4C03E1531E8F858D00C8B4D8 /* DetailViewController.swift in Sources */,
+				4C8751201E91E1EB00547700 /* MoviesCollectionViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

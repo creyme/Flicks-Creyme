@@ -10,7 +10,7 @@ import UIKit
 import AFNetworking
 import MBProgressHUD
 
-class MoviesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate {
+class MoviesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, UICollectionViewDelegate, UICollectionViewDataSource  {
 
     // OUTLETS
     @IBOutlet weak var tableView: UITableView!
@@ -19,6 +19,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     @IBOutlet weak var segmentControl: UISegmentedControl!
     @IBOutlet weak var featuredMovieImage: UIImageView!
     @IBOutlet weak var viewbgimage: UIImageView!
+    @IBOutlet weak var collectionView: UICollectionView!
     
     
     // VARIABLES
@@ -26,9 +27,11 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     var filteredMovies: [NSDictionary]?
     
     var refreshControl : UIRefreshControl!
+    var refreshControlCollectionView : UIRefreshControl!
     var searchBar = UISearchBar()
     var isSearching = false
     var endpoint : String!
+    var isTableView = true
     
 
     
@@ -43,22 +46,23 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         
         
         
-        
+        // FEATURED SETTINGS
         //movieHeader.backgroundColor = UIColor.clear
         let overlay = CAGradientLayer().blackTop()
         overlay.frame = movieHeader.bounds
         movieHeader.layer.insertSublayer(overlay, at: 1)
-        
-
-        
-        
-
+ 
         // TABLEVIEW SETTINGS
         tableView.delegate = self
         tableView.dataSource = self
         self.tableView.backgroundColor = UIColor.clear
-
         
+        // COLLECTIONVIEW SETTINGS
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        collectionView.alwaysBounceVertical = true
+        collectionView.backgroundColor = .clear
+
         
         // REFRESH CONTROL
         addRefresher()
@@ -81,6 +85,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         let blurView = UIVisualEffectView(effect: blur)
         blurView.frame = self.view.bounds
         self.view.insertSubview(blurView, at: 1)
+        
         
         
     }
@@ -191,8 +196,95 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         return cell
     }
     
+ 
     
+    
+    
+// COLLECTIONVIEW CONFIG ------------------------------------------------------------------
+    
+    //Cell size (autolayout)
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: IndexPath) -> CGSize {
+        let size = CGSize(width: self.view.frame.size.width / 3.01, height: self.view.frame.size.width / 2)
+        return size
+        
+    }
 
+    
+    // cell numb
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        
+        if let filteredMovies = filteredMovies {
+            return filteredMovies.count
+        } else {
+            return 0
+        }
+    }
+
+
+
+    // cell config
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+        // define cell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MoviesCollectionViewCell", for: indexPath) as! MoviesCollectionViewCell
+        
+        // create imageView in cell to show pictures
+        //let posterImage = UIImageView(frame: CGRect(x: 0, y: 0, width: cell.frame.size.width, height: cell.frame.size.height))
+        //cell.addSubview(posterImage)
+        
+        // LOAD IMAGES
+        
+        let movie = filteredMovies![indexPath.row]
+        let ImageUrl = "https://image.tmdb.org/t/p/w500"
+        
+        if let posterPath = movie["poster_path"] as? String {
+            
+            let ImageRequest = NSURLRequest(url: NSURL(string: ImageUrl + posterPath)! as URL)
+            
+            
+            cell.posterImage.setImageWith(ImageRequest as URLRequest, placeholderImage: nil, success: { (ImageRequest, ImageResponse, Image) in
+                
+                
+                
+                if ImageResponse != nil {
+                    
+                    self.errorNetworkView.alpha = 0
+                     cell.posterImage.alpha = 0
+                     cell.posterImage.image = Image;
+                    
+                    UIView.animate(withDuration: 0.4, animations: {
+                        
+                         cell.posterImage.alpha = 1
+                        
+                    })
+                } else {
+                    
+                     cell.posterImage.image = Image
+                    
+                }
+                
+                
+            }, failure: { (request, response, error) in
+                
+                //cell.posterImage.image = UIImage(named: "")
+                UIView.animate(withDuration: 1.0, animations: {
+                    self.errorNetworkView.alpha = 1
+                })
+                
+            })
+        }
+
+       
+        
+        
+        return cell
+        
+}
+
+
+
+    
     
     
 
@@ -232,9 +324,10 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
                 
                     
                     self.refreshControl.endRefreshing()
+                    self.refreshControlCollectionView.endRefreshing()
                     MBProgressHUD.hide(for: self.view, animated: true)
-                    self.tableView.reloadData()
                     
+                    self.reloadTableorCollection()
                     
                     
                     // Recall there are two fields in the response dictionary, 'meta' and 'response'.
@@ -251,6 +344,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
                 UIView.animate(withDuration: 1.0, animations: {
                     self.errorNetworkView.alpha = 1
                 })
+                
                 
                 
                 
@@ -273,8 +367,18 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         
         refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(refreshControlAction(_:)), for: UIControlEvents.valueChanged)
-        
         tableView.insertSubview(refreshControl, at: 0)
+        
+        refreshControlCollectionView = UIRefreshControl()
+        refreshControlCollectionView.addTarget(self, action: #selector(refreshControlAction(_:)), for: UIControlEvents.valueChanged)
+        collectionView.insertSubview(refreshControlCollectionView, at: 0)
+        
+            
+        
+            
+        
+        
+        
 
     }
     
@@ -343,7 +447,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
             
         })
         
-        self.tableView.reloadData()
+        reloadTableorCollection()
         
     }
     
@@ -362,13 +466,49 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         
  
         filteredMovies = movies
-        tableView.reloadData()
+        reloadTableorCollection()
         isSearching = false
         searchButtonOn()
         
         
     }
 
+ 
+    
+    
+    @IBAction func listGridControl(_ sender: Any) {
+        
+    
+        if segmentControl.selectedSegmentIndex == 1 {
+            
+            isTableView = false
+        } else {
+            isTableView = true
+        }
+        
+        connectToAPI()
+    }
+    
+        
+        func reloadTableorCollection() {
+            
+            if isTableView {
+                
+                tableView.isHidden = false
+                collectionView.isHidden = true
+                tableView.reloadData()
+            } else {
+                
+                collectionView.isHidden = false
+                tableView.isHidden = true
+                collectionView.reloadData()
+            }
+
+            
+        }
+        
+    
+    
     
     
 // SEGUE ------------------------------------------------------------------
@@ -380,20 +520,36 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         
         print ("prepare for segue")
         
+                // Get the new view controller using segue.destinationViewController.
+                // Pass the selected object to the new view controller.
+                if let cell = sender as? UITableViewCell
+                {
+                    let indexPath = tableView.indexPath(for: cell)
+                    let movie = movies![indexPath!.row]
+                    
+                    let detailViewController = segue.destination as! DetailViewController
+                    
+                    
+                    // Pass the selected object to the new view controller.
+                    
+                    detailViewController.movie = movie
+                }
+                else if let cell = sender as? UICollectionViewCell
+                {
+                    let indexPath = collectionView.indexPath(for: cell)
+                    let movie = movies![indexPath!.row]
+                    
+                    let detailViewController = segue.destination as! DetailViewController
+                    
+                    
+                    // Pass the selected object to the new view controller.
+                    
+                    detailViewController.movie = movie                }
+        }
         
-        // Get the new view controller using segue.destinationViewController.
-        let cell = sender as! UITableViewCell
-        let indexPath = tableView.indexPath(for: cell)
-        let movie = movies![indexPath!.row]
         
-        let detailViewController = segue.destination as! DetailViewController
-        
-        
-        // Pass the selected object to the new view controller.
-        
-        detailViewController.movie = movie
-    }
 
-    
+
+
     
 }
