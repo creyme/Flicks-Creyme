@@ -62,6 +62,15 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         collectionView.dataSource = self
         collectionView.alwaysBounceVertical = true
         collectionView.backgroundColor = .clear
+        
+        // APPEARANCE
+        let blurBg = viewbgimage.image
+        self.view.backgroundColor = UIColor(patternImage: blurBg!)
+        
+        let blur = UIBlurEffect(style: UIBlurEffectStyle.dark)
+        let blurView = UIVisualEffectView(effect: blur)
+        blurView.frame = self.view.bounds
+        self.view.insertSubview(blurView, at: 1)
 
         
         // REFRESH CONTROL
@@ -74,17 +83,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         // NETWORK REQUEST
         connectToAPI()
         
-        let featuredimageUrl = URL(string: "https://image.tmdb.org/t/p/original/5pAGnkFYSsFJ99ZxDIYnhQbQFXs.jpg")
-        featuredMovieImage.setImageWith(featuredimageUrl!, placeholderImage: nil)
         
-        //let blurBg = UIImage(named: "samplebg.jpg")
-        let blurBg = viewbgimage.image
-        self.view.backgroundColor = UIColor(patternImage: blurBg!)
-
-        let blur = UIBlurEffect(style: UIBlurEffectStyle.dark)
-        let blurView = UIVisualEffectView(effect: blur)
-        blurView.frame = self.view.bounds
-        self.view.insertSubview(blurView, at: 1)
         
         
         
@@ -92,8 +91,6 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
 
     
 
-    
-    
     
     
     
@@ -304,6 +301,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     
         MBProgressHUD.showAdded(to: self.view, animated: true)
         self.errorNetworkView.alpha = 0
+        loadFeatured()
         
     let task : URLSessionDataTask = session.dataTask(
         with: request as URLRequest,
@@ -322,12 +320,12 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
                     //self.imageArray = [UIImage?](repeating: nil, count: (self.movies?.count)!)
                     
                 
-                    
+                    self.reloadTableorCollection()
                     self.refreshControl.endRefreshing()
                     self.refreshControlCollectionView.endRefreshing()
                     MBProgressHUD.hide(for: self.view, animated: true)
                     
-                    self.reloadTableorCollection()
+                    
                     
                     
                     // Recall there are two fields in the response dictionary, 'meta' and 'response'.
@@ -356,8 +354,14 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
 
+// FEATURED FUNCTIONS---------------------------------------------------------------------------    
     
+    func loadFeatured() {
+        let featuredimageUrl = URL(string: "https://image.tmdb.org/t/p/original/5pAGnkFYSsFJ99ZxDIYnhQbQFXs.jpg")
+        featuredMovieImage.setImageWith(featuredimageUrl!, placeholderImage: nil)
     
+
+    }
     
     
 // REFRESH FUNCTIONS---------------------------------------------------------------------------
@@ -372,19 +376,15 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         refreshControlCollectionView = UIRefreshControl()
         refreshControlCollectionView.addTarget(self, action: #selector(refreshControlAction(_:)), for: UIControlEvents.valueChanged)
         collectionView.insertSubview(refreshControlCollectionView, at: 0)
-        
-            
-        
-            
-        
-        
-        
 
     }
     
     func refreshControlAction(_ refreshControl: UIRefreshControl) {
         
         connectToAPI()
+        refreshControl.endRefreshing()
+        refreshControlCollectionView.endRefreshing()
+        MBProgressHUD.hide(for: self.view, animated: true)
         
         searchBar.text = ""
 
