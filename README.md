@@ -28,7 +28,6 @@ The following **additional** features are implemented:
 
 - [x] App Icon
 - [x] Partial Auto Layout
-- [x] App Icon
 - [ ] Include more details: Ratings, Date, Genre, Cinema classification/rating, and etc.
 - [ ] Featured Currently showing movie
 - [ ] Featured Top movie
