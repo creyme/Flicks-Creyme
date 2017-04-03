@@ -40,12 +40,15 @@ Here's a walkthrough of implemented user stories:
 <img src='https://cloud.githubusercontent.com/assets/20750697/24596682/a1d5b172-17f5-11e7-8560-adea31b2352f.jpeg' />
 
 The basic required functionality of the app.
+
 <img src='https://github.com/creyme/Flicks-Creyme/blob/master/Flicks-features.gif?raw=true' />
 
 The search bar of the app.
+
 <img src='https://github.com/creyme/Flicks-Creyme/blob/master/Flicks-search.gif?raw=true' />
 
 The Network Error Bar of the app.
+
 <img src='https://github.com/creyme/Flicks-Creyme/blob/master/Flicks-networkerrorAlert.gif?raw=true' />
 
 
@@ -53,7 +56,8 @@ GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
 ## Notes
 
-Time.
+CHALLENGES:
+Time. I still need to clean up my code, it's a total mess...
 
 ## License
 
