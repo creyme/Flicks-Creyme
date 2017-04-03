@@ -16,6 +16,43 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
+        // TABBAR PROGRAMMATIC
+        
+        window = UIWindow(frame: UIScreen.main.bounds)
+        
+            // Set storyboard
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        
+            // Create now playing view controller
+            let nowPlayingNavigationController = storyboard.instantiateViewController(withIdentifier: "MoviesNavigationController") as! UINavigationController
+            let nowPlayingViewController = nowPlayingNavigationController.topViewController as! MoviesViewController
+            nowPlayingViewController.endpoint = "now_playing"
+            nowPlayingNavigationController.tabBarItem.title = "Now Playing"
+            nowPlayingNavigationController.tabBarItem.image = UIImage(named: "nowPlayingIcon.png")
+        
+            // Create top rated view controller
+            let topRatedNavigationController = storyboard.instantiateViewController(withIdentifier: "MoviesNavigationController") as! UINavigationController
+            let topRatedViewController = topRatedNavigationController.topViewController as! MoviesViewController
+            topRatedViewController.endpoint = "top_rated"
+            topRatedNavigationController.tabBarItem.title = "Top Rated"
+            topRatedNavigationController.tabBarItem.image = UIImage(named: "topRatedIcon.png")
+        
+            // Create tabbar
+            let tabBarController = UITabBarController()
+            tabBarController.viewControllers = [nowPlayingNavigationController, topRatedNavigationController]
+            UITabBar.appearance().barStyle = .black
+            UITabBar.appearance().tintColor = .white
+        
+        
+            // Set root view contoller
+            window?.rootViewController = tabBarController
+            window?.makeKeyAndVisible()
+        
+        
+        
+        
+        
         return true
     }
 
